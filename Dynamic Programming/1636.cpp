@@ -13,6 +13,7 @@ using namespace std;
 
 typedef pair<int,int> pii;
 typedef vector<int> vi;
+typedef vector< vector<int> > vvi;
 typedef vector< pair<int,int> > vpii;
 
 
@@ -23,27 +24,27 @@ const int MOD = 1e9+7;
 
 signed main(){
     OAO
-    int n , k ;
+    int n,k;
     cin>>n>>k;
 
     vi coin(n);
     for(int & c : coin ) cin>>c;
 
-    vi dp(k+1 ,0 );
-    dp[0] = 1;
-    for(int i=1;i<=k;i++){
-        for(int & c : coin ){
-            if( i-c >=0 ){
-                dp[i] = (dp[i] + dp[i-c])%MOD;
+    vvi dp(n+1 ,vi(k+1,0) );
+    dp[0][0] = 1;
+
+    for(int i=1;i<=n;i++){
+        for(int j=0;j<=k;j++){
+            dp[i][j] = dp[i-1][j];
+            
+            int left = j-coin[i-1];
+            if( left >=0 ){
+                dp[i][j] = ( dp[i][j] + dp[i][left] )%MOD;
             }
         }
     }
 
-    for(int i : dp ){
-        cout<<i<<' ';
-    }
-    cout<<'\n';
+    cout<<dp[n][k]<<'\n';
     
-    cout<<dp[k]<<'\n';
     return 0;
 }
